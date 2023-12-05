@@ -4,17 +4,48 @@ const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      fontSize: {
+        12: '12px',
+        14: '14px',
+        16: '16px',
+        18: '18px',
+        20: '20px',
+        24: '24px',
+        28: '28px',
+        32: '32px'
       },
-    },
+      colors: {
+        'primary-color': '#FE2C55',
+        'hover-primary-color': '#EF2950',
+        'border-color': '#E2E2E2',
+        'border-input-color': '#D7D7D9',
+        'text-color': '#000000',
+        'text-disabled-color': '#A7A7AB',
+        'bg-login-color': '#FFFFFF',
+        'bg-disabled-color': '#F1F1F2',
+        'bg-input-color': '#F1F1F2'
+      },
+      keyframes: {
+        'scale-center': {
+          '0%': { position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%) scale(0)' },
+          '50%': {
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%,-50%) scale(0.5)'
+          },
+          '100%': { position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%) scale(1)' }
+        }
+      },
+      animation: {
+        'scale-center': 'scale-center 0.3s linear'
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 }
 export default config

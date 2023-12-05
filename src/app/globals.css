@@ -2,26 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer components {
+  .border-default {
+    @apply border border-solid border-border-color;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  .login-item {
+    @apply flex items-center justify-start py-2 px-4 border-default my-4 cursor-pointer;
+  }
+  .border-input {
+    @apply border border-solid border-border-input-color;
+  }
+  .input-container {
+    @apply flex flex-col items-start justify-start mb-2;
+  }
+  .input-item {
+    @apply border-input bg-bg-input-color outline-none rounded-sm px-4 py-2 w-full;
+  }
+  .center {
+    @apply fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-50;
+  }
+  .overlay {
+    @apply fixed top-0 left-0 w-full h-full z-40 bg-black opacity-50;
+  }
+  .btn-primary {
+    @apply rounded-md font-bold w-full py-2 text-white bg-primary-color hover:bg-hover-primary-color;
+  }
+  .btn-disabled {
+    @apply rounded-md font-bold w-full py-2 cursor-not-allowed text-text-disabled-color bg-bg-disabled-color;
+  }
 }
