@@ -18,6 +18,9 @@
   .input-item {
     @apply border-input bg-bg-input-color outline-none rounded-sm px-4 py-2 w-full;
   }
+  .input-item-error {
+    @apply input-item border-red-500 text-red-500;
+  }
   .center {
     @apply fixed top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] z-50;
   }
@@ -29,5 +32,8 @@
   }
   .btn-disabled {
     @apply rounded-md font-bold w-full py-2 cursor-not-allowed text-text-disabled-color bg-bg-disabled-color;
+  }
+  .error-message {
+    @apply text-red-500 text-12;
   }
 }

@@ -1,8 +1,12 @@
-import { handleLogin } from '@/actions/auth'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import ForgotPassword from './ForgotPassword'
+import { useForm } from 'react-hook-form'
+import { AUTH_MESSAGES } from '@/constants/message'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AuthLogin, AuthLoginSchema } from '@/schemas/auth.schema'
+import { handleLogin } from '@/actions/auth.action'
 
 interface LoginFormProps {
   isShowLoginForm: boolean
@@ -10,35 +14,41 @@ interface LoginFormProps {
 }
 
 const LoginForm = (props: LoginFormProps) => {
+  const {
+    register,
+    unregister,
+    watch,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(AuthLoginSchema)
+  })
   const { isShowLoginForm, showLoginForm } = props
   const [isShowForgotPassword, setShowForgotPassword] = useState<boolean>(false)
-  const [loginData, setLoginData] = useState<{ email: string; password: string }>({ email: '', password: '' })
-  const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleCloseLoginForm = () => {
     showLoginForm(false)
-    setLoginData({ email: '', password: '' })
+    unregister('email')
+    unregister('password')
   }
 
   const handleShowForgotPassword = () => {
     setShowForgotPassword(true)
-    setLoginData({ email: '', password: '' })
+    unregister('email')
+    unregister('password')
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target
-    setLoginData({ ...loginData, [name]: value })
+  const isError = () => {
+    return errors.email || errors.password
   }
 
-  useEffect(() => {
-    if (loginData.email === '' || loginData.password === '') {
-      btnRef.current?.classList.remove('btn-primary')
-      btnRef.current?.classList.add('btn-disabled')
-    } else {
-      btnRef.current?.classList.remove('btn-disabled')
-      btnRef.current?.classList.add('btn-primary')
-    }
-  }, [loginData])
+  const checkDisable = () => {
+    return !watch('email') || !watch('password') || isError()
+  }
+
+  const onSubmit = (data: AuthLogin) => {
+    handleLogin(data)
+  }
 
   return (
     <>
@@ -49,35 +59,33 @@ const LoginForm = (props: LoginFormProps) => {
           </button>
           <div>
             <h1 className='text-32 font-semibold pt-8 text-center mb-4'>Login</h1>
-            <form action={handleLogin}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className='input-container'>
                 <label htmlFor='email' className='font-medium mb-2'>
                   Email
                 </label>
                 <input
-                  value={loginData.email}
-                  onChange={handleChange}
-                  className='input-item'
-                  type='email'
-                  name='email'
+                  className={`${errors.email ? 'input-item-error' : 'input-item'}`}
+                  type='text'
                   id='email'
                   placeholder='Email'
                   spellCheck={false}
+                  {...register('email', { required: AUTH_MESSAGES.EMAIL_REQUIRED })}
                 />
+                {errors.email && <span className='error-message'>{errors.email.message}</span>}
               </div>
               <div className='input-container'>
                 <label htmlFor='password' className='font-medium mb-2'>
                   Password
                 </label>
                 <input
-                  value={loginData.password}
-                  onChange={handleChange}
-                  className='input-item'
+                  className={`${errors.password ? 'input-item-error' : 'input-item'}`}
                   type='password'
-                  name='password'
                   id='password'
                   placeholder='Password'
+                  {...register('password', { required: AUTH_MESSAGES.PASSWORD_REQUIRED })}
                 />
+                {errors.password && <span className='error-message'>{errors.password.message}</span>}
               </div>
               <div className='mb-4'>
                 <span
@@ -87,7 +95,7 @@ const LoginForm = (props: LoginFormProps) => {
                   Forgot password ?
                 </span>
               </div>
-              <button ref={btnRef} className='btn-disabled'>
+              <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'}`}>
                 Login
               </button>
             </form>

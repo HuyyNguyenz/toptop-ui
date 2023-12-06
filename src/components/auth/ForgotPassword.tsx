@@ -1,6 +1,10 @@
+import { handleResetPassword, handleSendCode } from '@/actions/auth.action'
+import { regexEmail } from '@/constants/regex'
+import { AuthResetPassword, AuthResetPasswordSchema } from '@/schemas/auth.schema'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useRef } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
 
 interface ForgotPasswordProps {
   isShowForgotPassword: boolean
@@ -8,11 +12,38 @@ interface ForgotPasswordProps {
 }
 
 const ForgotPassword = (props: ForgotPasswordProps) => {
+  const {
+    register,
+    unregister,
+    watch,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(AuthResetPasswordSchema)
+  })
   const { isShowForgotPassword, showForgotPassword } = props
-  const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleCloseForgotPassword = () => {
     showForgotPassword(false)
+    unregister('email')
+    unregister('code')
+    unregister('password')
+  }
+
+  const isError = () => {
+    return errors.email || errors.code || errors.password
+  }
+
+  const checkDisable = () => {
+    return !watch('email') || !watch('code') || !watch('password') || isError()
+  }
+
+  const onSubmit = (data: AuthResetPassword) => {
+    handleResetPassword(data)
+  }
+
+  const handleClick = () => {
+    watch('email').match(regexEmail) && handleSendCode(watch('email'))
   }
 
   return (
@@ -24,19 +55,20 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
           </button>
           <div>
             <h1 className='text-32 font-semibold pt-8 text-center mb-4'>Reset password</h1>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className='input-container'>
                 <label htmlFor='email' className='font-medium mb-2'>
                   Email address
                 </label>
                 <input
                   className='input-item'
-                  type='email'
-                  name='email'
+                  type='text'
                   id='email'
                   placeholder='Email address'
                   spellCheck={false}
+                  {...register('email')}
                 />
+                {errors.email && <span className='error-message'>{errors.email.message}</span>}
               </div>
               <div className='input-container'>
                 <label htmlFor='code' className='font-medium mb-2'>
@@ -44,23 +76,39 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
                 </label>
                 <div className='flex items-center justify-start w-full'>
                   <input
-                    maxLength={6}
-                    className='input-item w-[70%]'
+                    spellCheck={false}
+                    className='input-item rounded-r-none w-[70%]'
                     type='text'
-                    name='code'
                     id='code'
                     placeholder='Enter code length 6 characters'
+                    {...register('code')}
                   />
-                  <button className='btn-disabled rounded-none border-input flex-1'>Send code</button>
+                  <button
+                    onClick={handleClick}
+                    type='button'
+                    className={`btn-disabled rounded-l-none rounded-r-sm border-input flex-1 ${
+                      watch('email') && watch('email').match(regexEmail) ? 'cursor-pointer text-black' : ''
+                    }`}
+                  >
+                    Send code
+                  </button>
                 </div>
+                {errors.code && <span className='error-message'>{errors.code.message}</span>}
               </div>
               <div className='input-container'>
                 <label htmlFor='password' className='font-medium mb-2'>
                   Password
                 </label>
-                <input className='input-item' type='password' name='password' id='password' placeholder='Password' />
+                <input
+                  className='input-item'
+                  type='password'
+                  id='password'
+                  placeholder='Password'
+                  {...register('password')}
+                />
+                {errors.password && <span className='error-message'>{errors.password.message}</span>}
               </div>
-              <button ref={btnRef} className='btn-disabled mt-8'>
+              <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'} mt-8`}>
                 Reset password
               </button>
             </form>
