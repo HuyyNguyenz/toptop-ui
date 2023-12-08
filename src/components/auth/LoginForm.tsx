@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import ForgotPassword from './ForgotPassword'
 import { useForm } from 'react-hook-form'
-import { AUTH_MESSAGES } from '@/constants/message'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AuthLogin, AuthLoginSchema } from '@/schemas/auth.schema'
 import { handleLogin } from '@/actions/auth.action'
+import Input from '../Input'
 
 interface LoginFormProps {
   isShowLoginForm: boolean
@@ -60,33 +60,22 @@ const LoginForm = (props: LoginFormProps) => {
           <div>
             <h1 className='text-32 font-semibold pt-8 text-center mb-4'>Login</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className='input-container'>
-                <label htmlFor='email' className='font-medium mb-2'>
-                  Email
-                </label>
-                <input
-                  className={`${errors.email ? 'input-item-error' : 'input-item'}`}
-                  type='text'
-                  id='email'
-                  placeholder='Email'
-                  spellCheck={false}
-                  {...register('email', { required: AUTH_MESSAGES.EMAIL_REQUIRED })}
-                />
-                {errors.email && <span className='error-message'>{errors.email.message}</span>}
-              </div>
-              <div className='input-container'>
-                <label htmlFor='password' className='font-medium mb-2'>
-                  Password
-                </label>
-                <input
-                  className={`${errors.password ? 'input-item-error' : 'input-item'}`}
-                  type='password'
-                  id='password'
-                  placeholder='Password'
-                  {...register('password', { required: AUTH_MESSAGES.PASSWORD_REQUIRED })}
-                />
-                {errors.password && <span className='error-message'>{errors.password.message}</span>}
-              </div>
+              <Input
+                label='Email'
+                name='email'
+                type='text'
+                placeholder='Enter your email'
+                errors={errors}
+                register={register}
+              />
+              <Input
+                label='Password'
+                name='password'
+                type='password'
+                placeholder='Enter your password'
+                errors={errors}
+                register={register}
+              />
               <div className='mb-4'>
                 <span
                   onClick={handleShowForgotPassword}

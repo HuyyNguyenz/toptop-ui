@@ -1,12 +1,12 @@
 'use server'
 
-import { AuthLogin, AuthResetPassword } from '@/schemas/auth.schema'
+import { AuthLogin, AuthRegister, AuthResetPassword } from '@/schemas/auth.schema'
 
 export const handleLogin = (data: AuthLogin) => {
   console.log('data: ', data)
 }
 
-export const handleRegister = (data: FormData) => {
+export const handleRegister = (data: AuthRegister) => {
   console.log('data:', data)
 }
 

@@ -1,10 +1,11 @@
-import { handleResetPassword, handleSendCode } from '@/actions/auth.action'
-import { regexEmail } from '@/constants/regex'
+import { handleResetPassword } from '@/actions/auth.action'
 import { AuthResetPassword, AuthResetPasswordSchema } from '@/schemas/auth.schema'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
+import Input from '../Input'
 import { useForm } from 'react-hook-form'
+import InputSendCode from '../InputSendCode'
 
 interface ForgotPasswordProps {
   isShowForgotPassword: boolean
@@ -42,10 +43,6 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
     handleResetPassword(data)
   }
 
-  const handleClick = () => {
-    watch('email').match(regexEmail) && handleSendCode(watch('email'))
-  }
-
   return (
     <>
       {isShowForgotPassword && (
@@ -53,62 +50,27 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
           <button className='text-24 mt-4' onClick={handleCloseForgotPassword}>
             <FontAwesomeIcon icon={faAngleLeft} />
           </button>
-          <div>
+          <div className='max-h-[25rem] overflow-y-auto'>
             <h1 className='text-32 font-semibold pt-8 text-center mb-4'>Reset password</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className='input-container'>
-                <label htmlFor='email' className='font-medium mb-2'>
-                  Email address
-                </label>
-                <input
-                  className='input-item'
-                  type='text'
-                  id='email'
-                  placeholder='Email address'
-                  spellCheck={false}
-                  {...register('email')}
-                />
-                {errors.email && <span className='error-message'>{errors.email.message}</span>}
-              </div>
-              <div className='input-container'>
-                <label htmlFor='code' className='font-medium mb-2'>
-                  Enter code
-                </label>
-                <div className='flex items-center justify-start w-full'>
-                  <input
-                    spellCheck={false}
-                    className='input-item rounded-r-none w-[70%]'
-                    type='text'
-                    id='code'
-                    placeholder='Enter code length 6 characters'
-                    {...register('code')}
-                  />
-                  <button
-                    onClick={handleClick}
-                    type='button'
-                    className={`btn-disabled rounded-l-none rounded-r-sm border-input flex-1 ${
-                      watch('email') && watch('email').match(regexEmail) ? 'cursor-pointer text-black' : ''
-                    }`}
-                  >
-                    Send code
-                  </button>
-                </div>
-                {errors.code && <span className='error-message'>{errors.code.message}</span>}
-              </div>
-              <div className='input-container'>
-                <label htmlFor='password' className='font-medium mb-2'>
-                  Password
-                </label>
-                <input
-                  className='input-item'
-                  type='password'
-                  id='password'
-                  placeholder='Password'
-                  {...register('password')}
-                />
-                {errors.password && <span className='error-message'>{errors.password.message}</span>}
-              </div>
-              <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'} mt-8`}>
+              <Input
+                label='Email'
+                name='email'
+                type='text'
+                placeholder='Enter your email'
+                errors={errors}
+                register={register}
+              />
+              <InputSendCode register={register} errors={errors} watch={watch} />
+              <Input
+                label='Password'
+                name='password'
+                type='password'
+                placeholder='Enter your password'
+                errors={errors}
+                register={register}
+              />
+              <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'} mt-4`}>
                 Reset password
               </button>
             </form>
