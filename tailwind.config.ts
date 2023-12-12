@@ -23,10 +23,10 @@ const config: Config = {
         'hover-primary-color': '#EF2950',
         'border-color': '#E2E2E2',
         'border-input-color': '#D7D7D9',
-        'text-color': '#000000',
+        'text-title-color': '#161823',
+        'text-color': '#4E5058',
         'text-disabled-color': '#A7A7AB',
         'bg-login-color': '#FFFFFF',
-        'bg-disabled-color': '#F1F1F2',
         'bg-input-color': '#F1F1F2'
       },
       keyframes: {

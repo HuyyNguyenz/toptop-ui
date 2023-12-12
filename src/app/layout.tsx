@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
-import 'react-datepicker/dist/react-datepicker.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={roboto.className}>
         <Header />
         {children}
+        <ToastContainer />
       </body>
     </html>
   )

@@ -25,10 +25,9 @@ export const AuthRegisterSchema = yup
   .object({
     email,
     password,
-    code,
-    dateOfBirth: yup.date(),
-    firstName: yup.string().required(AUTH_MESSAGES.FIRST_NAME_REQUIRED),
-    lastName: yup.string().required(AUTH_MESSAGES.LAST_NAME_REQUIRED)
+    date_of_birth: yup.date(),
+    first_name: yup.string().required(AUTH_MESSAGES.FIRST_NAME_REQUIRED),
+    last_name: yup.string().required(AUTH_MESSAGES.LAST_NAME_REQUIRED)
   })
   .required()
 export type AuthRegister = yup.InferType<typeof AuthRegisterSchema>

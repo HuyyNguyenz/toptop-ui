@@ -31,7 +31,7 @@
     @apply rounded-md font-bold w-full py-2 text-white bg-primary-color hover:bg-hover-primary-color;
   }
   .btn-disabled {
-    @apply rounded-md font-bold w-full py-2 cursor-not-allowed text-text-disabled-color bg-bg-disabled-color;
+    @apply rounded-md font-bold w-full py-2 cursor-not-allowed text-text-disabled-color bg-bg-input-color;
   }
   .error-message {
     @apply text-red-500 text-12;

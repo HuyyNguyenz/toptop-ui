@@ -5,7 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AuthRegisterSchema, AuthRegister } from '@/schemas/auth.schema'
 import { handleRegister } from '@/actions/auth.action'
 import Input from '../Input'
-import InputSendCode from '../InputSendCode'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 interface RegisterFormProps {
   isShowRegisterForm: boolean
@@ -23,34 +24,48 @@ const RegisterForm = (props: RegisterFormProps) => {
     resolver: yupResolver(AuthRegisterSchema)
   })
   const { isShowRegisterForm, showRegisterForm } = props
+  const router = useRouter()
 
   const handleCloseRegisterForm = () => {
     showRegisterForm(false)
     unregister('email')
     unregister('password')
-    unregister('dateOfBirth')
-    unregister('firstName')
-    unregister('lastName')
+    unregister('date_of_birth')
+    unregister('first_name')
+    unregister('last_name')
   }
 
   const isError = () => {
-    return errors.email || errors.password || errors.dateOfBirth || errors.firstName || errors.lastName || errors.code
+    return errors.email || errors.password || errors.date_of_birth || errors.first_name || errors.last_name
   }
 
   const checkDisable = () => {
     return (
       !watch('email') ||
       !watch('password') ||
-      !watch('dateOfBirth') ||
-      !watch('firstName') ||
-      !watch('lastName') ||
-      !watch('code') ||
+      !watch('date_of_birth') ||
+      !watch('first_name') ||
+      !watch('last_name') ||
       isError()
     )
   }
 
-  const onSubmit = (data: AuthRegister) => {
-    handleRegister(data)
+  const onSubmit = async (data: AuthRegister) => {
+    const result = await handleRegister(data)
+    if (result.statusCode === 400) {
+      toast.error(result.message, {
+        autoClose: 2000,
+        position: 'top-center'
+      })
+    } else {
+      toast.success(result.message, {
+        autoClose: 2000,
+        position: 'top-center'
+      })
+      router.push('/login', {
+        scroll: false
+      })
+    }
   }
 
   return (
@@ -65,7 +80,7 @@ const RegisterForm = (props: RegisterFormProps) => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <Input
                 label='First name'
-                name='firstName'
+                name='first_name'
                 placeholder='Enter your first name'
                 type='text'
                 errors={errors}
@@ -73,7 +88,7 @@ const RegisterForm = (props: RegisterFormProps) => {
               />
               <Input
                 label='Last name'
-                name='lastName'
+                name='last_name'
                 placeholder='Enter your last name'
                 type='text'
                 errors={errors}
@@ -81,7 +96,7 @@ const RegisterForm = (props: RegisterFormProps) => {
               />
               <Input
                 label="When's your birthday"
-                name='dateOfBirth'
+                name='date_of_birth'
                 placeholder='Enter your birthday'
                 type='date'
                 errors={errors}
@@ -103,9 +118,8 @@ const RegisterForm = (props: RegisterFormProps) => {
                 errors={errors}
                 register={register}
               />
-              <InputSendCode errors={errors} register={register} watch={watch} />
               <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'} mt-2`}>
-                Register
+                Next
               </button>
             </form>
           </div>
