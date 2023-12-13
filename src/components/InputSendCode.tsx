@@ -1,4 +1,4 @@
-import { handleSendCode } from '@/actions/auth.action'
+import { handleSendCode } from '@/actions'
 import { regexEmail } from '@/constants/regex'
 import { useEffect, useState } from 'react'
 import { UseFormRegister, FieldErrors, UseFormWatch } from 'react-hook-form'

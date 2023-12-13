@@ -4,8 +4,8 @@ import { useState } from 'react'
 import ForgotPassword from './ForgotPassword'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { AuthLogin, AuthLoginSchema } from '@/schemas/auth.schema'
-import { handleLogin } from '@/actions/auth.action'
+import { AuthLogin, AuthLoginSchema } from '@/schemas'
+import { handleLogin } from '@/actions'
 import Input from '../Input'
 
 interface LoginFormProps {

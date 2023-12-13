@@ -1,5 +1,5 @@
-import { handleResetPassword } from '@/actions/auth.action'
-import { AuthResetPassword, AuthResetPasswordSchema } from '@/schemas/auth.schema'
+import { handleResetPassword } from '@/actions'
+import { AuthResetPassword, AuthResetPasswordSchema } from '@/schemas'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
