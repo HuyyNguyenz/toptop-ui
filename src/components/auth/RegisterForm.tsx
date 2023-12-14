@@ -52,20 +52,17 @@ const RegisterForm = (props: RegisterFormProps) => {
 
   const onSubmit = async (data: AuthRegister) => {
     const result = await handleRegister(data)
-    if (result.statusCode === 400) {
-      toast.error(result.message, {
+    if (result.error) {
+      return toast.error(result.message, {
         autoClose: 2000,
         position: 'top-center'
-      })
-    } else {
-      toast.success(result.message, {
-        autoClose: 2000,
-        position: 'top-center'
-      })
-      router.push('/login', {
-        scroll: false
       })
     }
+    toast.success(result.message, {
+      autoClose: 2000,
+      position: 'top-center'
+    })
+    router.push('/login', { scroll: false })
   }
 
   return (
@@ -119,7 +116,7 @@ const RegisterForm = (props: RegisterFormProps) => {
                 register={register}
               />
               <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'} mt-2`}>
-                Next
+                Register
               </button>
             </form>
           </div>
