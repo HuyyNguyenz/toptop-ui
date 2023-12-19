@@ -1,12 +1,14 @@
+'use client'
+
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AuthRegisterSchema, AuthRegister } from '@/schemas'
-import { handleRegister } from '@/actions'
-import Input from '../Input'
+import Input from '../input/Input'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
+import * as lodash from 'lodash'
 
 interface RegisterFormProps {
   isShowRegisterForm: boolean
@@ -51,18 +53,19 @@ const RegisterForm = (props: RegisterFormProps) => {
   }
 
   const onSubmit = async (data: AuthRegister) => {
-    const result = await handleRegister(data)
-    if (result.error) {
-      return toast.error(result.message, {
-        autoClose: 2000,
-        position: 'top-center'
-      })
-    }
-    toast.success(result.message, {
-      autoClose: 2000,
-      position: 'top-center'
-    })
-    router.push('/login', { scroll: false })
+    // const result = await handleRegister(data)
+    // const message = Array.isArray(result.message) ? result.message[0] : result.message
+    // if (result.error) {
+    //   return toast.error(lodash.capitalize(message), {
+    //     autoClose: 2000,
+    //     position: 'top-center'
+    //   })
+    // }
+    // router.push('/login', { scroll: false })
+    // toast.success(lodash.capitalize(message), {
+    //   autoClose: 2000,
+    //   position: 'top-center'
+    // })
   }
 
   return (

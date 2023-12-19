@@ -1,27 +1,31 @@
-'use server'
-
-import { AuthLogin, AuthRegister, AuthResetPassword } from '@/schemas'
+import { AuthLogin } from '@/schemas'
 import fetchApi from '@/utils/fetchApi'
+import { AxiosError } from 'axios'
+import { setCookie } from 'cookies-next'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { toast } from 'react-toastify'
 
-export const handleLogin = (data: AuthLogin) => {
-  const result = fetchApi.post('/users/login', data)
-  return result
-}
-
-export const handleRegister = async (data: AuthRegister) => {
-  const result = await fetchApi.post('/users/register', data)
-  return result
-}
-
-export const handleResetPassword = (data: AuthResetPassword) => {
-  console.log('data: ', data)
-}
-
-export const handleSendCode = (email: string) => {
-  console.log('email: ', email)
-}
-
-export const handleVerifyEmail = async (token: string) => {
-  const result = await fetchApi.patch('/users/verify-email', { token })
-  return result
+export const handleLogin = async (data: AuthLogin, router: AppRouterInstance) => {
+  try {
+    const result = (await fetchApi.post('/auth/login', data)).data
+    const { access_token, refresh_token } = result.result
+    setCookie('access_token', access_token)
+    setCookie('refresh_token', refresh_token)
+    router.push('/', { scroll: false })
+    toast.success(result.message, {
+      autoClose: 2000,
+      position: 'top-center',
+      icon: '✅'
+    })
+  } catch (error: any) {
+    if (error.response) {
+      const { message } = error.response.data
+      return toast.error(message, {
+        autoClose: 2000,
+        position: 'top-center',
+        icon: '❌'
+      })
+    }
+    throw error
+  }
 }

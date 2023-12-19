@@ -1,15 +1,15 @@
+'use client'
+
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import ForgotPassword from './ForgotPassword'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AuthLogin, AuthLoginSchema } from '@/schemas'
-import { handleLogin } from '@/actions'
-import Input from '../Input'
+import Input from '../input/Input'
 import { useRouter } from 'next/navigation'
-import { toast } from 'react-toastify'
-import { setCookie } from 'cookies-next'
+import ForgotPasswordForm from './ForgotPasswordForm'
+import { handleLogin } from '@/actions'
 
 interface LoginFormProps {
   isShowLoginForm: boolean
@@ -50,22 +50,8 @@ const LoginForm = (props: LoginFormProps) => {
     return !watch('email') || !watch('password') || isError()
   }
 
-  const onSubmit = async (data: AuthLogin) => {
-    const result = await handleLogin(data)
-    const { access_token, refresh_token } = result.result
-    if (result.error) {
-      return toast.error(result.message, {
-        autoClose: 2000,
-        position: 'top-center'
-      })
-    }
-    setCookie('access_token', access_token)
-    setCookie('refresh_token', refresh_token)
-    router.push('/')
-    toast.success(result.message, {
-      autoClose: 2000,
-      position: 'top-center'
-    })
+  const onSubmit = (data: AuthLogin) => {
+    handleLogin(data, router)
   }
 
   return (
@@ -110,7 +96,10 @@ const LoginForm = (props: LoginFormProps) => {
         </div>
       )}
       {isShowLoginForm && (
-        <ForgotPassword isShowForgotPassword={isShowForgotPassword} showForgotPassword={setShowForgotPassword} />
+        <ForgotPasswordForm
+          isShowForgotPasswordForm={isShowForgotPassword}
+          showForgotPasswordForm={setShowForgotPassword}
+        />
       )}
     </>
   )

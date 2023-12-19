@@ -2,29 +2,30 @@
 
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle'
-import RegisterForm from '@/components/auth/RegisterForm'
+import LoginForm from '@/components/form/LoginForm'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
-const RegisterPage = () => {
-  const [isShowRegisterForm, setShowRegisterForm] = useState<boolean>(false)
+const LoginPage = () => {
+  const [isShowLoginForm, setShowLoginForm] = useState<boolean>(false)
+  const router = useRouter()
 
-  const handleOpenRegisterForm = () => {
-    setShowRegisterForm(true)
+  const handleOpenLoginForm = () => {
+    setShowLoginForm(true)
   }
 
   return (
     <>
       <div className='center bg-bg-login-color w-[31.25rem] max-h-[35rem] rounded-md border-default flex flex-col items-center justify-center animate-scale-center'>
-        {!isShowRegisterForm && (
+        {!isShowLoginForm && (
           <div className='max-w-[25rem] text-center'>
-            <h1 className='text-32 font-semibold pt-8'>Register to TikTok</h1>
-            <div onClick={handleOpenRegisterForm} className='login-item'>
+            <h1 className='text-32 font-semibold pt-8'>Login to TikTok</h1>
+            <div onClick={handleOpenLoginForm} className='login-item'>
               <FontAwesomeIcon icon={faUser} />
-              <span className='w-full font-medium'>Use email register</span>
+              <span className='w-full font-medium'>Use account login</span>
             </div>
             <div className='login-item'>
               <FontAwesomeIcon icon={faFacebook} />
@@ -41,11 +42,11 @@ const RegisterPage = () => {
             </p>
           </div>
         )}
-        <RegisterForm isShowRegisterForm={isShowRegisterForm} showRegisterForm={setShowRegisterForm} />
+        <LoginForm isShowLoginForm={isShowLoginForm} showLoginForm={setShowLoginForm} />
         <div className='flex items-center justify-center border-default border-l-transparent border-r-transparent border-b-transparent w-full py-4'>
-          <span>Already have an account ?</span>
-          <Link href='/login' scroll={false}>
-            <button className='text-primary-color ml-2 font-medium'>Login</button>
+          <span>{"Don't have an account ?"}</span>
+          <Link href='/register' scroll={false}>
+            <button className='text-primary-color ml-2 font-medium'>Register</button>
           </Link>
         </div>
       </div>
@@ -54,4 +55,4 @@ const RegisterPage = () => {
   )
 }
 
-export default RegisterPage
+export default LoginPage

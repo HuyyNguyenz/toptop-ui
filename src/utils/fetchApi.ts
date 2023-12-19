@@ -1,43 +1,70 @@
+import axios, { AxiosInstance } from 'axios'
+import { getCookie, setCookie } from 'cookies-next'
+
 class FetchApi {
-  constructor(private baseURL: string) {}
-  async get(url: string) {
-    const result = await fetch(`${this.baseURL + url}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+  private instance: AxiosInstance
+  private requestRefreshToken: any
+  constructor() {
+    this.requestRefreshToken = null
+    this.instance = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_URL as string,
+      timeout: 10000
     })
-    return await result.json()
+    this.instance.interceptors.request.use(
+      (config) => {
+        const access_token = getCookie('access_token') as string
+        if (access_token) {
+          config.headers.Authorization = `Bearer ${access_token}`
+        }
+        return config
+      },
+      (error) => Promise.reject(error)
+    )
+    this.instance.interceptors.response.use(
+      (config) => config,
+      (error) => {
+        if (error.response.data.statusCode === 403) {
+          this.requestRefreshToken = this.requestRefreshToken
+            ? this.requestRefreshToken
+            : handleRefreshToken().finally(() => (this.requestRefreshToken = null))
+          return this.requestRefreshToken.then(() => this.instance(error.response.config))
+        } else {
+          return Promise.reject(error)
+        }
+      }
+    )
   }
-  async post(url: string, body: any) {
-    const result = await fetch(`${this.baseURL + url}`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    return await result.json()
+  get(url: string, config?: object) {
+    return this.instance.get(url, config)
   }
-  async patch(url: string, body: any) {
-    const result = await fetch(`${this.baseURL + url}`, {
-      method: 'PATCH',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    return await result.json()
+  post(url: string, body: object, config?: object) {
+    return this.instance.post(url, body, config)
   }
-  async delete(url: string) {
-    const result = await fetch(`${this.baseURL + url}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    return await result.json()
+  put(url: string, body: object, config?: object) {
+    return this.instance.put(url, body, config)
+  }
+  patch(url: string, body: object, config?: object) {
+    return this.instance.patch(url, body, config)
+  }
+  delete(url: string, config?: object) {
+    return this.instance.delete(url, config)
   }
 }
-const fetchApi = new FetchApi(process.env.NEXT_PUBLIC_API_URL as string)
+
+const handleRefreshToken = async () => {
+  const refresh_token = getCookie('refresh_token') as string
+  if (refresh_token) {
+    try {
+      const result = (await fetchApi.patch('/auth/refresh-token', { refresh_token })).data
+      const { access_token, refresh_token: new_refresh_token } = result.result
+      setCookie('access_token', access_token)
+      setCookie('refresh_token', new_refresh_token)
+      return result
+    } catch (error: any) {
+      throw error
+    }
+  }
+}
+
+const fetchApi = new FetchApi()
 export default fetchApi

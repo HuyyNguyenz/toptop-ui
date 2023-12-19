@@ -1,18 +1,19 @@
-import { handleResetPassword } from '@/actions'
+'use client'
+
 import { AuthResetPassword, AuthResetPasswordSchema } from '@/schemas'
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Input from '../Input'
+import Input from '../input/Input'
 import { useForm } from 'react-hook-form'
-import InputSendCode from '../InputSendCode'
+import InputSendCode from '../input/SendCodeInput'
 
-interface ForgotPasswordProps {
-  isShowForgotPassword: boolean
-  showForgotPassword: (value: boolean) => void
+interface ForgotPasswordFormProps {
+  isShowForgotPasswordForm: boolean
+  showForgotPasswordForm: (value: boolean) => void
 }
 
-const ForgotPassword = (props: ForgotPasswordProps) => {
+const ForgotPasswordForm = (props: ForgotPasswordFormProps) => {
   const {
     register,
     unregister,
@@ -22,10 +23,10 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
   } = useForm({
     resolver: yupResolver(AuthResetPasswordSchema)
   })
-  const { isShowForgotPassword, showForgotPassword } = props
+  const { isShowForgotPasswordForm, showForgotPasswordForm } = props
 
   const handleCloseForgotPassword = () => {
-    showForgotPassword(false)
+    showForgotPasswordForm(false)
     unregister('email')
     unregister('code')
     unregister('password')
@@ -39,13 +40,11 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
     return !watch('email') || !watch('code') || !watch('password') || isError()
   }
 
-  const onSubmit = (data: AuthResetPassword) => {
-    handleResetPassword(data)
-  }
+  const onSubmit = (data: AuthResetPassword) => {}
 
   return (
     <>
-      {isShowForgotPassword && (
+      {isShowForgotPasswordForm && (
         <div className='w-[25rem] mb-4'>
           <button className='text-24 mt-4' onClick={handleCloseForgotPassword}>
             <FontAwesomeIcon icon={faAngleLeft} />
@@ -81,4 +80,4 @@ const ForgotPassword = (props: ForgotPasswordProps) => {
   )
 }
 
-export default ForgotPassword
+export default ForgotPasswordForm

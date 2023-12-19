@@ -1,22 +1,22 @@
-import { handleSendCode } from '@/actions'
+'use client'
+
 import { regexEmail } from '@/constants/regex'
 import { useEffect, useState } from 'react'
 import { UseFormRegister, FieldErrors, UseFormWatch } from 'react-hook-form'
 
-interface InputSendCodeProps {
+interface SendCodeInputProps {
   register: UseFormRegister<any>
   errors: FieldErrors<any>
   watch: UseFormWatch<any>
 }
 
-const InputSendCode = (props: InputSendCodeProps) => {
+const SendCodeInput = (props: SendCodeInputProps) => {
   const { register, errors, watch } = props
   const [timer, setTimer] = useState<number>(60)
 
   const handleClick = () => {
     if (watch('email').match(regexEmail) && timer === 60) {
       setTimer((prev) => prev - 1)
-      handleSendCode(watch('email'))
     }
   }
 
@@ -61,4 +61,4 @@ const InputSendCode = (props: InputSendCodeProps) => {
   )
 }
 
-export default InputSendCode
+export default SendCodeInput
