@@ -6,9 +6,8 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AuthRegisterSchema, AuthRegister } from '@/schemas'
 import Input from '../input/Input'
-import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-import * as lodash from 'lodash'
+import { handleRegister } from '@/apis'
 
 interface RegisterFormProps {
   isShowRegisterForm: boolean
@@ -53,19 +52,7 @@ const RegisterForm = (props: RegisterFormProps) => {
   }
 
   const onSubmit = async (data: AuthRegister) => {
-    // const result = await handleRegister(data)
-    // const message = Array.isArray(result.message) ? result.message[0] : result.message
-    // if (result.error) {
-    //   return toast.error(lodash.capitalize(message), {
-    //     autoClose: 2000,
-    //     position: 'top-center'
-    //   })
-    // }
-    // router.push('/login', { scroll: false })
-    // toast.success(lodash.capitalize(message), {
-    //   autoClose: 2000,
-    //   position: 'top-center'
-    // })
+    handleRegister(data, router)
   }
 
   return (

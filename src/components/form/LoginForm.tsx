@@ -9,7 +9,7 @@ import { AuthLogin, AuthLoginSchema } from '@/schemas'
 import Input from '../input/Input'
 import { useRouter } from 'next/navigation'
 import ForgotPasswordForm from './ForgotPasswordForm'
-import { handleLogin } from '@/actions'
+import { handleLogin } from '@/apis'
 
 interface LoginFormProps {
   isShowLoginForm: boolean

@@ -2,13 +2,16 @@ import axios, { AxiosInstance } from 'axios'
 import { getCookie, setCookie } from 'cookies-next'
 
 class FetchApi {
-  private instance: AxiosInstance
+  instance: AxiosInstance
   private requestRefreshToken: any
   constructor() {
     this.requestRefreshToken = null
     this.instance = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL as string,
-      timeout: 10000
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
     this.instance.interceptors.request.use(
       (config) => {
@@ -34,21 +37,6 @@ class FetchApi {
       }
     )
   }
-  get(url: string, config?: object) {
-    return this.instance.get(url, config)
-  }
-  post(url: string, body: object, config?: object) {
-    return this.instance.post(url, body, config)
-  }
-  put(url: string, body: object, config?: object) {
-    return this.instance.put(url, body, config)
-  }
-  patch(url: string, body: object, config?: object) {
-    return this.instance.patch(url, body, config)
-  }
-  delete(url: string, config?: object) {
-    return this.instance.delete(url, config)
-  }
 }
 
 const handleRefreshToken = async () => {
@@ -66,5 +54,5 @@ const handleRefreshToken = async () => {
   }
 }
 
-const fetchApi = new FetchApi()
+const fetchApi = new FetchApi().instance
 export default fetchApi

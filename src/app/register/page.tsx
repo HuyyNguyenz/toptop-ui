@@ -8,14 +8,24 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle'
 import RegisterForm from '@/components/form/RegisterForm'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { getCookie } from 'cookies-next'
 
 const RegisterPage = () => {
   const [isShowRegisterForm, setShowRegisterForm] = useState<boolean>(false)
+  const access_token = getCookie('access_token')
+  const [isLogin, setLogin] = useState<boolean>(false)
   const router = useRouter()
 
   const handleOpenRegisterForm = () => {
     setShowRegisterForm(true)
   }
+
+  useEffect(() => {
+    if (access_token) {
+      setLogin(true)
+      router.push('/')
+    }
+  }, [access_token, router])
 
   return (
     <>
