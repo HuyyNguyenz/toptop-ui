@@ -27,7 +27,10 @@ const config: Config = {
         'text-color': '#4E5058',
         'text-disabled-color': '#A7A7AB',
         'bg-login-color': '#FFFFFF',
-        'bg-input-color': '#F1F1F2'
+        'bg-input-color': '#F1F1F2',
+        'hover-menu-color': '#F8F8F8',
+        'light-color': '#FFFFFF',
+        'dark-color': '#000000'
       },
       keyframes: {
         'scale-center': {

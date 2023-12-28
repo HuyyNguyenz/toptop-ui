@@ -10,7 +10,7 @@ const Search = () => {
         name='search'
         id='search'
         placeholder='Search'
-        className='bg-bg-input-color outline-none w-[25rem] pr-8'
+        className='bg-bg-input-color outline-none w-[25rem] mr-10'
       />
       <button className='absolute right-0 py-2 px-4 text-[#AAAAAA] group-hover:text-[#161823] group-hover:bg-[#e4e4e6] rounded-tr-full rounded-br-full border-input'>
         <FontAwesomeIcon icon={faSearch} className='' />
