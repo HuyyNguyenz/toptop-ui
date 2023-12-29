@@ -9,6 +9,7 @@ import { faBookmark, faMoon, faUser } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import Modal from './Modal'
+import DarkModeButton from './DarkModeButton'
 
 interface UserMenuProps {
   user: UserType
@@ -31,7 +32,7 @@ const UserMenu = (props: UserMenuProps) => {
   }
 
   return (
-    <>
+    <div className='relative top-0 left-0'>
       <Menu>
         <div className='relative top-0 left-0'>
           <Menu.Button>
@@ -53,12 +54,13 @@ const UserMenu = (props: UserMenuProps) => {
                     className={`${
                       active && 'bg-hover-menu-color'
                     } flex items-center justify-start cursor-pointer py-2 px-4 ${
-                      item.label === 'Log out' && 'border-t border-solid border-border-color'
+                      item.label === 'Log out' && 'border-t border-solid border-border-color text-text-title-color'
                     }`}
                     href={item.href}
                   >
                     <FontAwesomeIcon icon={item.icon} />
                     <span className='ml-2'>{item.label}</span>
+                    {item.label === 'Dark mode' ? <DarkModeButton /> : null}
                   </a>
                 )}
               </Menu.Item>
@@ -67,7 +69,7 @@ const UserMenu = (props: UserMenuProps) => {
         </div>
       </Menu>
       <Modal isOpen={isLogout} setIsOpen={(isOpen) => setIsLogout(isOpen)} />
-    </>
+    </div>
   )
 }
 

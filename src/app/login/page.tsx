@@ -13,7 +13,7 @@ import GoogleButton from '@/components/GoogleButton'
 const LoginPage = () => {
   const [isShowLoginForm, setShowLoginForm] = useState<boolean>(false)
   const access_token = getCookie('access_token')
-  const [isLogin, setLogin] = useState<boolean>(false)
+  const [isLogin, setIsLogin] = useState<boolean>(true)
   const router = useRouter()
 
   const handleOpenLoginForm = () => {
@@ -21,8 +21,9 @@ const LoginPage = () => {
   }
 
   useEffect(() => {
-    if (access_token) {
-      setLogin(true)
+    if (!access_token) {
+      setIsLogin(false)
+    } else {
       router.push('/')
     }
   }, [access_token, router])

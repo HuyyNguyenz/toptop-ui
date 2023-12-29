@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Search from './Search'
 import Link from 'next/link'
-import { userData } from '@/app/page'
+import { userData } from '@/store'
 import { useAtomValue } from 'jotai'
 import UploadButton from './UploadButton'
 import MessageBox from './MessageBox'

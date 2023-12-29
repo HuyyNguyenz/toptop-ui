@@ -30,7 +30,8 @@ const config: Config = {
         'bg-input-color': '#F1F1F2',
         'hover-menu-color': '#F8F8F8',
         'light-color': '#FFFFFF',
-        'dark-color': '#000000'
+        'dark-color': '#000000',
+        'dark-mode-btn-color': '#0ACE8F'
       },
       keyframes: {
         'scale-center': {

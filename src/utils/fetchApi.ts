@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { getCookie, setCookie } from 'cookies-next'
+import { deleteCookie, getCookie, setCookie } from 'cookies-next'
 
 class FetchApi {
   instance: AxiosInstance
@@ -26,7 +26,10 @@ class FetchApi {
     this.instance.interceptors.response.use(
       (config) => config,
       (error) => {
-        if (error.response.data.statusCode === 403) {
+        if (
+          error.response.data.statusCode === 403 &&
+          error.response.data.message === 'Access token expired or invalid'
+        ) {
           this.requestRefreshToken = this.requestRefreshToken
             ? this.requestRefreshToken
             : handleRefreshToken().finally(() => (this.requestRefreshToken = null))
@@ -49,6 +52,10 @@ const handleRefreshToken = async () => {
       setCookie('refresh_token', new_refresh_token)
       return result
     } catch (error: any) {
+      if (error.response.data.statusCode === 403) {
+        deleteCookie('access_token')
+        deleteCookie('refresh_token')
+      }
       throw error
     }
   }

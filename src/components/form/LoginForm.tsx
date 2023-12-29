@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AuthLogin, AuthLoginSchema } from '@/schemas'
 import Input from '../input/Input'
-import { useRouter } from 'next/navigation'
 import ForgotPasswordForm from './ForgotPasswordForm'
 import { handleLogin } from '@/apis'
 
@@ -28,7 +27,7 @@ const LoginForm = (props: LoginFormProps) => {
   })
   const { isShowLoginForm, showLoginForm } = props
   const [isShowForgotPassword, setShowForgotPassword] = useState<boolean>(false)
-  const router = useRouter()
+  const [disabled, setDisabled] = useState<boolean>(false)
 
   const handleCloseLoginForm = () => {
     showLoginForm(false)
@@ -50,8 +49,11 @@ const LoginForm = (props: LoginFormProps) => {
     return !watch('email') || !watch('password') || isError()
   }
 
-  const onSubmit = (data: AuthLogin) => {
-    handleLogin(data, router)
+  const onSubmit = async (data: AuthLogin) => {
+    const result = await handleLogin(data)
+    if (result) {
+      setDisabled(true)
+    }
   }
 
   return (
@@ -88,7 +90,11 @@ const LoginForm = (props: LoginFormProps) => {
                   Forgot password ?
                 </span>
               </div>
-              <button type='submit' className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'}`}>
+              <button
+                disabled={disabled}
+                type='submit'
+                className={`${checkDisable() ? 'btn-disabled' : 'btn-primary'}`}
+              >
                 Login
               </button>
             </form>
